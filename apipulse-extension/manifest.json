@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "APIpulse — Provider Health & L2B",
+  "version": "1.0.0",
+  "description": "Evaluate API provider health, look-to-book efficiency, latency, and error rates. Local, private, and instant.",
+  "permissions": ["storage", "clipboardWrite"],
+  "action": { "default_popup": "popup.html", "default_title": "APIpulse provider health", "default_icon": {"48":"icon48.png", "128":"icon128.png"} },
+  "icons": {"48":"icon48.png", "128":"icon128.png"}
+}
