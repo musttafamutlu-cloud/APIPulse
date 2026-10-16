@@ -1,0 +1,11 @@
+{
+  "name": "apipulse",
+  "version": "1.1.0",
+  "private": true,
+  "description": "APIpulse - Chrome extension for evaluating API supplier health and look-to-book (L2B) efficiency",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "license": "Apache-2.0"
+}

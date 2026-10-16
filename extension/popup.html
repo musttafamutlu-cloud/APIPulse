@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>APIpulse — Supplier Health</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+      </div>
+      <div>
+        <h1>API<span>pulse</span></h1>
+        <p>SUPPLIER INTELLIGENCE</p>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Views">
+      <button class="tab active" data-tab="calc">Calculator</button>
+      <button class="tab" data-tab="batch">Batch</button>
+      <button class="tab" data-tab="history">History <span id="history-count" class="count">0</span></button>
+    </nav>
+  </header>
+
+  <!-- ===== Calculator ===== -->
+  <main id="panel-calc" class="panel">
+    <label class="label" for="supplier">Supplier / partner name</label>
+    <input id="supplier" list="supplier-list" placeholder="e.g. Amadeus" maxlength="100" autocomplete="off">
+    <datalist id="supplier-list"></datalist>
+
+    <div class="grid2">
+      <div>
+        <label class="label" for="period">Period <span class="opt">optional</span></label>
+        <input id="period" placeholder="e.g. 2026-10 or Last 7 days" maxlength="40">
+      </div>
+      <div>
+        <label class="label" for="benchmark">Benchmark</label>
+        <select id="benchmark"></select>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div><label class="label" for="searches">Searches / looks</label><input id="searches" type="number" min="0" step="1" placeholder="0"></div>
+      <div><label class="label" for="bookings">Bookings</label><input id="bookings" type="number" min="0" step="1" placeholder="0"></div>
+      <div><label class="label" for="latency">Avg. response time (ms)</label><input id="latency" type="number" min="0" step="any" placeholder="0"></div>
+      <div><label class="label" for="errors">Error rate (%) <span class="opt">optional</span></label><input id="errors" type="number" min="0" max="100" step="any" placeholder="—"></div>
+    </div>
+
+    <div id="ratio-panel" class="ratio-panel neutral">
+      <div class="ratio-top"><span>LOOK-TO-BOOK RATIO</span><span id="status-badge" class="badge neutral">Awaiting data</span></div>
+      <div class="ratio-number"><span id="ratio-number">—</span><small>searches per booking</small></div>
+      <div class="track"><span class="l0"></span><span class="l1"></span><span class="l2"></span><span class="l3"></span><i id="track-marker" hidden></i></div>
+      <div class="scale"><span>Efficient</span><span>High look-to-book</span></div>
+    </div>
+
+    <div class="grid2">
+      <div class="metric"><span class="metric-label">Latency</span><div class="metric-value"><b id="latency-value">—</b> ms</div><span id="latency-status" class="badge neutral">No data</span></div>
+      <div class="metric"><span class="metric-label">Error rate</span><div class="metric-value"><b id="errors-value">—</b> %</div><span id="errors-status" class="badge neutral">No data</span></div>
+    </div>
+
+    <p id="health-note" class="note neutral">Enter valid counts and latency to evaluate.</p>
+
+    <details class="card" id="thresholds">
+      <summary>Thresholds <small>edit to match your supplier agreement</small></summary>
+      <table class="th-table">
+        <thead><tr><th></th><th>Excellent &lt;</th><th>Good &lt;</th><th>Warning &lt;</th></tr></thead>
+        <tbody>
+          <tr><td>L2B (searches / booking)</td><td><input type="number" min="0" data-kind="ratio" data-i="0"></td><td><input type="number" min="0" data-kind="ratio" data-i="1"></td><td><input type="number" min="0" data-kind="ratio" data-i="2"></td></tr>
+          <tr><td>Latency (ms)</td><td><input type="number" min="0" data-kind="latency" data-i="0"></td><td><input type="number" min="0" data-kind="latency" data-i="1"></td><td><input type="number" min="0" data-kind="latency" data-i="2"></td></tr>
+          <tr><td>Errors (%)</td><td><input type="number" min="0" step="any" data-kind="errors" data-i="0"></td><td><input type="number" min="0" step="any" data-kind="errors" data-i="1"></td><td><input type="number" min="0" step="any" data-kind="errors" data-i="2"></td></tr>
+        </tbody>
+      </table>
+      <p class="hint">Values at or above the last column are <b>Critical</b>. Preset values are illustrative starting points. The worst of the three metrics decides the status.</p>
+    </details>
+
+    <button id="copy-btn" class="btn primary" disabled>Copy health report <small>Slack / e-mail</small></button>
+    <div class="row">
+      <button id="save-btn" class="btn" disabled>Save to history</button>
+      <button id="reset-btn" class="btn ghost">Reset</button>
+    </div>
+  </main>
+
+  <!-- ===== Batch ===== -->
+  <main id="panel-batch" class="panel" hidden>
+    <p class="hint top">Paste a table from Excel or a SQL result. Columns: <b>supplier, searches, bookings, avg latency (ms), error % (optional)</b>. A header row is skipped automatically. Saved supplier profiles are applied by name.</p>
+    <div class="grid2">
+      <div><label class="label" for="batch-period">Period <span class="opt">optional</span></label><input id="batch-period" placeholder="e.g. 2026-W42" maxlength="40"></div>
+      <div><label class="label" for="batch-benchmark">Default benchmark</label><select id="batch-benchmark"></select></div>
+    </div>
+    <label class="label" for="batch-input">Data</label>
+    <textarea id="batch-input" rows="6" spellcheck="false" placeholder="Amadeus&#9;8500&#9;125&#9;245&#9;0.4&#10;Sabre&#9;12000&#9;80&#9;3100&#9;2.5"></textarea>
+    <div class="row">
+      <button id="batch-run" class="btn primary">Analyze</button>
+      <button id="batch-example" class="btn ghost">Example</button>
+      <button id="batch-clear" class="btn ghost">Clear</button>
+    </div>
+    <ul id="batch-problems" class="problems" hidden></ul>
+    <div id="batch-results" hidden>
+      <div class="section-title">Results <small>worst first</small></div>
+      <div class="table-wrap"><table class="batch-table">
+        <thead><tr><th>Supplier</th><th>L2B</th><th>Latency</th><th>Err %</th><th>Status</th></tr></thead>
+        <tbody id="batch-body"></tbody>
+      </table></div>
+      <div class="row">
+        <button id="batch-copy" class="btn">Copy report</button>
+        <button id="batch-csv" class="btn">Export CSV</button>
+        <button id="batch-save" class="btn">Save all</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== History ===== -->
+  <main id="panel-history" class="panel" hidden>
+    <input id="history-filter" placeholder="Filter by supplier…" aria-label="Filter history by supplier">
+    <ul id="history-list" class="history-list"></ul>
+    <p id="history-empty" class="hint" hidden>No saved records yet. Use “Save to history” in the Calculator or “Save all” in Batch.</p>
+    <div class="row">
+      <button id="history-csv" class="btn">Export CSV</button>
+      <button id="history-clear" class="btn ghost danger">Clear history</button>
+    </div>
+    <details class="card">
+      <summary>Saved supplier profiles <span id="profile-count" class="count">0</span></summary>
+      <p class="hint">A profile (benchmark + thresholds) is saved when you save a supplier from the Calculator, and applied automatically when you pick that supplier again.</p>
+      <ul id="profile-list" class="profile-list"></ul>
+    </details>
+  </main>
+
+  <footer class="app-footer"><span id="footer-text">Local analysis. No data leaves your device.</span><span>v1.1</span></footer>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script type="module" src="src/popup.js"></script>
+</body>
+</html>
