@@ -27,9 +27,61 @@
     </div>
   </header>
   <main id="main">
-    <div class="wrap">
+    <article class="wrap section--tight">
+      <p class="eyebrow"><a href="../">Guide</a></p>
       <h1>Thresholds</h1>
-    </div>
+      <p class="byline">Last reviewed <time datetime="2026-10-24">24 October 2026</time></p>
+      <div class="prose">
+        <p class="answer">A threshold turns a number into a judgement. APIPulse uses three limits per measure to place each supplier in one of four bands, and the worst band across look-to-book, latency and errors becomes the verdict. The built-in presets are illustrative starting points; the right limits come from your supplier agreements and your own history.</p>
+
+        <h2>How the bands work</h2>
+        <p>Each measure has three ascending limits, a, b and c:</p>
+        <ul>
+          <li>below a: <strong>Excellent</strong></li>
+          <li>from a up to b: <strong>Good</strong></li>
+          <li>from b up to c: <strong>Warning</strong></li>
+          <li>at or above c: <strong>Critical</strong></li>
+        </ul>
+        <p>The supplier's verdict is the worst of its three bands. A supplier with an excellent ratio and a critical error rate is critical. This is deliberate: one failing measure is enough to cost bookings, and averaging would hide it.</p>
+
+        <h2>The built-in presets</h2>
+        <p>These are the values APIPulse starts with. They are illustrative and not taken from any supplier's agreement.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="table" data-benchmarks>
+          <caption class="small muted">Each cell lists the limits a / b / c.</caption>
+          <thead><tr><th>Preset</th><th class="right">Look-to-book (searches per booking)</th><th class="right">Latency (ms)</th><th class="right">Error rate (%)</th></tr></thead>
+          <tbody>
+            <tr data-preset="generic"><th scope="row">Generic B2B API</th><td class="num" data-metric="ratio">10,000 / 100,000 / 500,000</td><td class="num" data-metric="latency">1,500 / 3,000 / 6,000</td><td class="num" data-metric="errors">2 / 5 / 10</td></tr>
+            <tr data-preset="flights"><th scope="row">TravelTech / Flights</th><td class="num" data-metric="ratio">20,000 / 150,000 / 600,000</td><td class="num" data-metric="latency">1,500 / 3,000 / 6,000</td><td class="num" data-metric="errors">2 / 5 / 10</td></tr>
+            <tr data-preset="hotels"><th scope="row">Hotels / Bedbanks</th><td class="num" data-metric="ratio">10,000 / 80,000 / 400,000</td><td class="num" data-metric="latency">1,500 / 3,000 / 6,000</td><td class="num" data-metric="errors">2 / 5 / 10</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <h2>Calibrating to your own agreements</h2>
+        <h3>Look-to-book</h3>
+        <p>If the agreement states a maximum ratio or a fee above a level, that level is your Critical limit (c). Put Warning (b) well below it, at the point where you would want time to react; half to three quarters of the cap is a common choice. Set Excellent (a) from your own best quarter with that supplier.</p>
+        <p>Check how the agreement defines a look and over which period it is measured. A monthly cap tolerates a busy week that a weekly cap would not.</p>
+        <h3>Latency</h3>
+        <p>If there is a response-time commitment, use it as the Warning or Critical limit, depending on whether it is a target or a hard limit. Without one, start from your own data: the typical response time of the last quarter is a fair Good limit, and your timeout is the natural Critical limit. Decide whether you enter averages or p95 and keep to it; p95 limits need to be higher. See <a href="../latency/">Latency</a>.</p>
+        <h3>Error rate</h3>
+        <p>Base the limits on technical errors only. Set them from your recent baseline and from what a failed call costs at that step. Booking-step errors deserve tighter limits than search errors, which is a reason to review the booking step separately. See <a href="../errors/">Error rates</a>.</p>
+
+        <h2>Review them</h2>
+        <p>Thresholds age. Agreements are renegotiated, traffic grows, suppliers change platforms. Revisit them with each contract change and at least twice a year, and keep a note of why each limit was chosen. A limit without a reason is soon ignored.</p>
+
+        <div class="example">
+          <h3>Worked example</h3>
+          <p>Illustrative numbers. An agreement caps look-to-book at 30,000:1 for the month. The team sets look-to-book limits of 5,000 / 15,000 / 30,000, latency limits of 1,000 / 2,500 / 5,000 ms and error limits of 1 / 3 / 6%.</p>
+          <p>This month: 600,000 searches, 25 bookings, 1,200 ms average latency, 0.8% errors. L2B is <span class="num">24,000:1</span>, inside the cap but past the Warning limit, so the verdict is <em>Warning</em>. With the Hotels preset the same numbers would read <em>Good</em>; the calibrated limits catch the approaching cap a month earlier.</p>
+          <p><a href="../../tool/#v1=eyJiIjoiY3VzdG9tIiwidCI6W1s1MDAwLDE1MDAwLDMwMDAwXSxbMTAwMCwyNTAwLDUwMDBdLFsxLDMsNl1dLCJuIjpbNjAwMDAwLDI1LDEyMDAsMC44XX0">Open this example in the tool</a></p>
+        </div>
+
+        <h2>Setting them in APIPulse</h2>
+        <p>Open <strong>Thresholds</strong> under the single check, edit the limits, and save the check with a supplier name. The limits are stored with that supplier's profile and are used again whenever you check or batch-rank that supplier, in this browser.</p>
+      </div>
+    </article>
   </main>
   <footer class="site-footer">
     <div class="wrap site-footer__grid">

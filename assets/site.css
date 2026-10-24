@@ -192,3 +192,11 @@ label.btn { cursor: pointer; }
 .hero { padding: 56px 0 32px; }
 .hero h1 { max-width: 18ch; }
 a.card .small { color: var(--accent); }
+
+/* Guide */
+.guide-list { margin: 24px 0; }
+.guide-list h2 { font-size: 1.15rem; }
+article .table-wrap { max-width: 56rem; margin: 1.5em 0; }
+.table th[scope="row"] { text-transform: none; letter-spacing: 0; font-size: 0.925rem; color: var(--text); background: transparent; font-weight: 560; }
+.table th.right { text-align: right; }
+.table caption { text-align: left; padding: 8px 12px; caption-side: bottom; }

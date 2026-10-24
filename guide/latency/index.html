@@ -27,9 +27,61 @@
     </div>
   </header>
   <main id="main">
-    <div class="wrap">
+    <article class="wrap section--tight">
+      <p class="eyebrow"><a href="../">Guide</a></p>
       <h1>Latency</h1>
-    </div>
+      <p class="byline">Last reviewed <time datetime="2026-10-24">24 October 2026</time></p>
+      <div class="prose">
+        <p class="answer">Latency is how long a supplier takes to answer a request, measured from your side of the connection. The average is the easiest number to report and the least useful one: it hides the slow tail that users actually wait for. Track percentiles (p50, p95, p99) and the share of requests that hit your timeout.</p>
+
+        <h2>Why the average misleads</h2>
+        <p>Suppose 100 searches go to a supplier. 95 come back in 400 ms and 5 take 8 seconds.</p>
+        <ul>
+          <li>The <strong>average</strong> is (95 × 400 + 5 × 8,000) ÷ 100 = <span class="num">780 ms</span>. It looks acceptable.</li>
+          <li>The <strong>p95</strong>, the time within which 95% of requests finish, is <span class="num">400 ms</span>.</li>
+          <li>The <strong>p99</strong> is <span class="num">8,000 ms</span>.</li>
+        </ul>
+        <p>One search in twenty takes eight seconds. On a results page that waits for every supplier, those requests set the speed of the whole page. The average describes a request that never happened.</p>
+
+        <h2>Which percentiles to watch</h2>
+        <ul>
+          <li><strong>p50</strong> (the median) shows the typical experience and is stable from day to day. Use it to spot gradual drift.</li>
+          <li><strong>p95</strong> is the working number for most supplier reviews. It captures the slow tail without being dominated by a handful of outliers.</li>
+          <li><strong>p99</strong> shows the worst experiences. It is noisy at low volume, so read it over enough requests to be meaningful.</li>
+        </ul>
+        <p>Percentiles cannot be averaged across suppliers or periods. Compute them from the raw response times, or from histograms built for that purpose.</p>
+
+        <h2>Timeouts change what you measure</h2>
+        <p>Every integration has a timeout. When a request exceeds it, you stop waiting, and that request usually disappears from latency statistics and reappears as an error. Two consequences follow:</p>
+        <ol>
+          <li>Tightening a timeout makes latency look better and error rates look worse, with no change on the supplier side.</li>
+          <li>A supplier that is slow for some requests can look fast in latency reports while quietly losing you results.</li>
+        </ol>
+        <p>Report latency and timeout rate side by side, and note the timeout value with every report so that numbers from different periods are comparable.</p>
+
+        <h2>Measure each step separately</h2>
+        <p>A search, a price re-check and a booking are different operations with different costs and different tolerances.</p>
+        <ul>
+          <li><strong>Search</strong> runs in parallel across suppliers, so its slow tail decides the speed of the results page.</li>
+          <li><strong>Price check or pre-book</strong> happens once the user has chosen. Users tolerate a short wait, but a slow answer here often comes with a price change.</li>
+          <li><strong>Book</strong> can legitimately take longer. It must never be cut short by an aggressive timeout: a booking that times out may still have been made. Treat it as unknown and reconcile it with the supplier before retrying.</li>
+        </ul>
+        <p>Request shape matters as well. Multi-room, large-occupancy and wide-area searches are slower for most suppliers. Compare like with like before concluding that one supplier is slower than another.</p>
+
+        <h2>Where the time goes</h2>
+        <p>Latency measured on your side includes your own network path, TLS setup, serialization and any queueing in your connector. If one supplier is slow from every location and at every hour, the cause is likely on their side. If it is slow only at peak times or only from one data centre, look closer to home first: connection pooling, keep-alive settings and payload compression are common culprits.</p>
+
+        <div class="example">
+          <h3>Worked example</h3>
+          <p>Illustrative numbers. A supplier answers 20,000 searches in a period with an average of 3,400 ms, converts 10 of them into bookings, and fails 1% of calls.</p>
+          <p>L2B is <span class="num">2,000:1</span> and the error rate is low, but against the Generic preset the latency is <em>Slow</em>, so the overall verdict is <em>Warning</em>. The verdict is driven by the worst measure, not by an average of the three.</p>
+          <p><a href="../../tool/#v1=eyJiIjoiZ2VuZXJpYyIsIm4iOlsyMDAwMCwxMCwzNDAwLDFdfQ">Open this example in the tool</a></p>
+        </div>
+
+        <h2>How APIPulse scores it</h2>
+        <p>APIPulse takes one latency figure per supplier and rates it Fast, Moderate, Slow or Very slow against the selected thresholds. Enter the average for a quick check, or the p95 for a stricter one, and keep the same choice over time so that periods stay comparable. If you switch to p95, raise the thresholds to match; see <a href="../thresholds/">Thresholds</a>.</p>
+      </div>
+    </article>
   </main>
   <footer class="site-footer">
     <div class="wrap site-footer__grid">
