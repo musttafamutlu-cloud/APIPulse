@@ -200,3 +200,10 @@ article .table-wrap { max-width: 56rem; margin: 1.5em 0; }
 .table th[scope="row"] { text-transform: none; letter-spacing: 0; font-size: 0.925rem; color: var(--text); background: transparent; font-weight: 560; }
 .table th.right { text-align: right; }
 .table caption { text-align: left; padding: 8px 12px; caption-side: bottom; }
+
+/* Teams */
+.teams-grid { margin: 24px 0 40px; }
+.teams-grid h2 { font-size: 1.1rem; }
+.teams-form { max-width: 44rem; }
+.textarea--prose { font-family: var(--font); font-size: 1rem; }
+.hp { display: none; }
