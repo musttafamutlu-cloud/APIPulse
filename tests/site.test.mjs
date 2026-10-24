@@ -85,3 +85,21 @@ test('footer carries the non-affiliation note', () => {
 test('.nojekyll exists so Pages serves files as-is', () => {
   assert.ok(fileExists('.nojekyll'));
 });
+
+test('sitemap lists every public page', () => {
+  const xml = read('sitemap.xml');
+  for (const page of PAGES.filter((p) => p !== '404.html')) {
+    assert.ok(xml.includes(`<loc>${BASE_URL}${page.replace(/index\.html$/, '')}</loc>`), page);
+  }
+});
+
+for (const page of PAGES.filter((p) => p !== '404.html')) {
+  test(`${page}: social tags`, () => {
+    const html = read(page);
+    assert.equal(metaContent(html, 'property', 'og:image'), `${BASE_URL}assets/img/social-card.png`);
+    assert.equal(metaContent(html, 'property', 'og:url'), BASE_URL + page.replace(/index\.html$/, ''));
+    assert.ok(metaContent(html, 'property', 'og:title'));
+    assert.equal(metaContent(html, 'name', 'twitter:card'), 'summary_large_image');
+    assert.ok(fileExists('assets/img/social-card.png'));
+  });
+}
