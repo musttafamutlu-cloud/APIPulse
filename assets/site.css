@@ -187,3 +187,8 @@ a.card:hover { border-color: var(--line-strong); }
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: var(--radius); font-size: 0.9rem; z-index: 20; max-width: calc(100% - 32px); }
 .toast[hidden] { display: none; }
 label.btn { cursor: pointer; }
+
+/* Home */
+.hero { padding: 56px 0 32px; }
+.hero h1 { max-width: 18ch; }
+a.card .small { color: var(--accent); }

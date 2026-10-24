@@ -11,6 +11,7 @@
   <link rel="icon" href="./assets/img/icon.png">
   <link rel="stylesheet" href="./assets/site.css">
   <script type="module" src="./assets/site.js"></script>
+  <script type="module" src="./assets/tool.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -27,9 +28,56 @@
     </div>
   </header>
   <main id="main">
-    <div class="wrap">
-      <h1>Supplier health for travel APIs.</h1>
-    </div>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">For travel API integration teams</p>
+        <h1>Supplier health for travel APIs.</h1>
+        <p class="lead">Look-to-book, latency and errors in one verdict. Check a supplier in seconds, rank a whole portfolio from a pasted table, and send the result to your team as one line.</p>
+        <div id="tool" data-tool-mode="compact">
+          <noscript><p class="notice">The calculator needs JavaScript. The <a href="guide/">guide</a> works without it.</p></noscript>
+        </div>
+        <p class="small muted">Runs in your browser. Your numbers never leave your device.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>What it measures</h2>
+        <p class="muted">Three numbers decide whether a supplier connection is healthy. The worst of the three sets the verdict.</p>
+        <div class="grid">
+          <a class="card" href="guide/look-to-book/">
+            <h3>Look-to-book</h3>
+            <p class="muted">Searches sent per confirmed booking. The number suppliers watch, cap and sometimes invoice.</p>
+            <span class="small">Read the guide</span>
+          </a>
+          <a class="card" href="guide/latency/">
+            <h3>Latency</h3>
+            <p class="muted">How long the supplier takes to answer. Averages hide the slow tail that customers actually feel.</p>
+            <span class="small">Read the guide</span>
+          </a>
+          <a class="card" href="guide/errors/">
+            <h3>Error rate</h3>
+            <p class="muted">Failed calls as a share of all calls. Technical failures and business rejections need to be counted apart.</p>
+            <span class="small">Read the guide</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap grid">
+        <div>
+          <h2>Use it in Chrome</h2>
+          <p class="muted">The APIPulse extension keeps the same calculator one click away, with supplier profiles, batch mode and history stored on your device. No host permissions, no network requests.</p>
+          <p><a class="btn btn--primary" href="https://chromewebstore.google.com/detail/lcmdjjckhlcoflpjfhgbgcpegommmjfi" rel="noopener">Add to Chrome</a></p>
+        </div>
+        <div>
+          <h2>For teams</h2>
+          <p class="muted">Shared supplier registries, contract limits and alerts are what we are exploring next. If your team tracks many supplier connections, tell us what you need.</p>
+          <p><a class="btn" href="teams/">See what is planned</a></p>
+        </div>
+      </div>
+    </section>
   </main>
   <footer class="site-footer">
     <div class="wrap site-footer__grid">
