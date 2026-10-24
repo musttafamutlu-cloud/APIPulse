@@ -216,7 +216,7 @@ These came out of an independent builder review of this document. Each is Claude
 - Exact copy, layout and component styling within the tone and anti-goals above.
 - Exact list and order of guide sub-topics within each article.
 
-## 14. Decisions needed from Mustafa
+## 14. Decisions by Mustafa (2026-10-24)
 
-- Contact e-mail for the Teams waitlist (form service account and `mailto:` fallback). Must be a personal, non-CuddlyNest address, ideally a dedicated alias.
-- Brand spelling on the site: "APIpulse" (as in the extension and store listing) or "APIPulse".
+- **Contact e-mail:** musttafamutlu@gmail.com. Used for the form service account and as the `mailto:` fallback. Claude's call: once the form endpoint exists, the address is removed from the page so it is not exposed to scrapers; it never appears as a personal byline.
+- **Brand spelling:** **APIPulse** everywhere on the site. Claude's call: the extension's manifest name and the store listing ("APIpulse") are renamed in a separate, small extension change (v1.2) together with the store text, so this site version does not touch the extension.
