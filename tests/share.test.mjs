@@ -131,3 +131,19 @@ test('parseBackup caps history at 200 and drops malformed records', () => {
   assert.equal(out.history.length, 200);
   assert.ok(out.history.every((r) => typeof r.supplier === 'string' && typeof r.searches === 'number'));
 });
+
+test('share keeps the custom benchmark used by edited thresholds', () => {
+  const out = decodeShare(encodeShare({ ...base, benchmark: 'custom' }));
+  assert.equal(out.ok, true);
+  assert.equal(out.state.benchmark, 'custom');
+  assert.equal(out.notice, undefined);
+  assert.deepEqual(out.state.thresholds, custom);
+});
+
+test('backup keeps custom benchmark on records and profiles', () => {
+  const r = { ...rec('Juniper'), benchmark: 'custom', thresholds: custom };
+  const out = parseBackup(serializeBackup({ history: [r], suppliers: { juniper: { name: 'Juniper', benchmark: 'custom', thresholds: custom } } }));
+  assert.equal(out.history[0].benchmark, 'custom');
+  assert.deepEqual(out.history[0].thresholds, custom);
+  assert.equal(out.suppliers.juniper.benchmark, 'custom');
+});

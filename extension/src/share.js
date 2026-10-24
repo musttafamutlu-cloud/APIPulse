@@ -23,6 +23,8 @@ function fromBase64Url(b64) {
 }
 
 const sameThresholds = (a, b) => ['ratio', 'latency', 'errors'].every((k) => a[k].every((v, i) => v === b[k][i]));
+// 'custom' marks thresholds edited by hand (same convention as the extension popup).
+const knownBenchmark = (k) => k === 'custom' || Object.hasOwn(BENCHMARKS, k);
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 const isNumOrNull = (v) => v === null || isNum(v);
 
@@ -35,7 +37,7 @@ export function encodeShare(state, { includeSupplier = false } = {}) {
   if (period) payload.p = period;
   payload.b = benchmark;
   const th = normalizeThresholds(state.thresholds, presetThresholds(benchmark));
-  if (!sameThresholds(th, presetThresholds(benchmark))) payload.t = [th.ratio, th.latency, th.errors];
+  if (benchmark === 'custom' || !sameThresholds(th, presetThresholds(benchmark))) payload.t = [th.ratio, th.latency, th.errors];
   const num = (v) => (v === '' || v === null || v === undefined ? null : Number(v));
   payload.n = [num(state.searches), num(state.bookings), num(state.latency), num(state.errors)];
   return `v${SHARE_VERSION}=${toBase64Url(JSON.stringify(payload))}`;
@@ -67,7 +69,7 @@ export function decodeShare(fragment) {
 
   let notice;
   let benchmark = typeof data.b === 'string' ? data.b : 'generic';
-  if (!Object.hasOwn(BENCHMARKS, benchmark)) {
+  if (!knownBenchmark(benchmark)) {
     notice = `Unknown benchmark "${benchmark}", using Generic B2B API instead.`;
     benchmark = 'generic';
   }
@@ -102,7 +104,7 @@ export function serializeBackup({ history, suppliers }) {
 function cleanRecord(r) {
   if (!r || typeof r !== 'object' || typeof r.supplier !== 'string' || !r.supplier.trim()) return null;
   if (![r.searches, r.bookings, r.latency, r.errors ?? null].every(isNumOrNull)) return null;
-  const benchmark = Object.hasOwn(BENCHMARKS, r.benchmark) ? r.benchmark : 'generic';
+  const benchmark = knownBenchmark(r.benchmark) ? r.benchmark : 'generic';
   return {
     ...r,
     period: typeof r.period === 'string' ? r.period : '',
@@ -129,7 +131,7 @@ export function parseBackup(text) {
   const suppliers = {};
   for (const p of Object.values(data.suppliers && typeof data.suppliers === 'object' ? data.suppliers : {})) {
     if (!p || typeof p.name !== 'string' || !p.name.trim()) continue;
-    const benchmark = Object.hasOwn(BENCHMARKS, p.benchmark) ? p.benchmark : 'generic';
+    const benchmark = knownBenchmark(p.benchmark) ? p.benchmark : 'generic';
     suppliers[p.name.trim().toLowerCase()] = { name: p.name.trim(), benchmark, thresholds: normalizeThresholds(p.thresholds, presetThresholds(benchmark)) };
   }
   return { ok: true, history, suppliers };
