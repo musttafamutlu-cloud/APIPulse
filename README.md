@@ -14,6 +14,16 @@ Chrome extension to evaluate **API supplier health** for travel-tech integration
 
 > The benchmark presets (Generic, Flights, Hotels) are illustrative starting points. Calibrate them to real agreements.
 
+## Website
+
+The same tool runs without installing anything at **https://musttafamutlu-cloud.github.io/APIPulse/**, together with a short guide to look-to-book, latency, error rates and thresholds.
+
+- Static HTML, CSS and ES modules at the repo root (`index.html`, `tool/`, `guide/`, `teams/`, `privacy/`, `assets/`). No build step.
+- The web tool imports `extension/src/core.js`, so the website and the extension always give the same verdict. Share links and backups live in `extension/src/share.js`.
+- Hosted on GitHub Pages: Settings → Pages → Deploy from a branch → `main` / `(root)`.
+- Preview locally from the folder **above** the repo so paths match production: `python3 -m http.server 8000`, then open `http://localhost:8000/APIPulse/`.
+- Moving to a custom domain: update the absolute URLs in each page's `<head>` (canonical and Open Graph tags), `sitemap.xml`, `BASE_URL` in `tests/site-helpers.mjs`, and the `/APIPulse/` paths in `404.html`.
+
 ## Install (unpacked)
 
 1. Open `chrome://extensions` and enable **Developer mode**.

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; base-uri 'none'; object-src 'none'; form-action 'none'">
+  <title>Privacy — APIPulse</title>
+  <meta name="description" content="What the APIPulse website and Chrome extension collect, and what they do not.">
+  <link rel="canonical" href="https://musttafamutlu-cloud.github.io/APIPulse/privacy/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="APIPulse">
+  <meta property="og:title" content="Privacy — APIPulse">
+  <meta property="og:description" content="What the APIPulse website and Chrome extension collect, and what they do not.">
+  <meta property="og:url" content="https://musttafamutlu-cloud.github.io/APIPulse/privacy/">
+  <meta property="og:image" content="https://musttafamutlu-cloud.github.io/APIPulse/assets/img/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/img/icon.png">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script type="module" src="../assets/site.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap site-header__bar">
+      <a class="brand" href="../"><img src="../assets/img/icon.png" alt="" width="28" height="28"><span>APIPulse</span></a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="../tool/">Tool</a>
+        <a href="../guide/">Guide</a>
+        <a href="../teams/">Teams</a>
+        <a class="btn btn--small" href="https://chromewebstore.google.com/detail/lcmdjjckhlcoflpjfhgbgcpegommmjfi" rel="noopener">Add to Chrome</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="wrap section--tight">
+      <p class="eyebrow">Privacy</p>
+      <h1>Privacy</h1>
+      <p class="byline">Last updated <time datetime="2026-10-24">24 October 2026</time></p>
+      <div class="prose">
+        <p class="answer">The APIPulse tool runs entirely in your browser. The numbers you enter, your history and your supplier profiles are never sent to us or to anyone else. The only information that leaves your device is what you choose to send through the Teams waitlist form.</p>
+
+        <h2>The website tool</h2>
+        <ul>
+          <li>Calculations happen in this browser tab. The tool pages carry a content security policy that blocks network requests, so the page cannot send your inputs anywhere even by mistake.</li>
+          <li>History and supplier profiles are saved in your browser's local storage for this website only. They are not shared with the Chrome extension, with other browsers or with other devices.</li>
+          <li>Local storage belongs to the website's address. If APIPulse moves to a new address, export a backup first and import it on the new address.</li>
+          <li>Share links put the shared values after the # sign of the address. Browsers do not send that part to the web server, but anyone who receives the link can read it. The supplier name is left out unless you tick the box to include it.</li>
+          <li>You can delete everything at any time: clear history in the tool, or clear this site's data in your browser settings.</li>
+        </ul>
+
+        <h2>The Chrome extension</h2>
+        <ul>
+          <li>The extension asks for two permissions: storage, to keep history and profiles on your device, and clipboard write, to copy reports.</li>
+          <li>It has no host permissions, no content scripts and makes no network requests.</li>
+        </ul>
+
+        <h2>The Teams waitlist</h2>
+        <ul>
+          <li>If you submit the waitlist form, we receive what you entered: e-mail, company, role, number of supplier connections and your description.</li>
+          <li>Submissions are processed by <a href="https://formspree.io/legal/privacy-policy" rel="noopener">Formspree</a>. Until that service is connected, the form opens your own e-mail app instead and nothing is sent unless you send the e-mail.</li>
+          <li>We use these details only to contact you about APIPulse for teams. Ask us to delete them at any time by replying to any message from us.</li>
+        </ul>
+
+        <h2>What we do not do</h2>
+        <ul>
+          <li>No cookies.</li>
+          <li>No analytics, tracking pixels or advertising scripts.</li>
+          <li>No third-party scripts or fonts; every file is served from this website.</li>
+        </ul>
+
+        <h2>Hosting</h2>
+        <p>This website is hosted on GitHub Pages. Like any web host, GitHub may log technical request data such as IP addresses to operate and secure the service. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub's privacy statement</a>.</p>
+        <p>The source code of the website and the extension is public on <a href="https://github.com/musttafamutlu-cloud/APIPulse" rel="noopener">GitHub</a>, so every statement on this page can be checked.</p>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap site-footer__grid">
+      <div>
+        <p class="brand brand--quiet"><img src="../assets/img/icon.png" alt="" width="20" height="20"><span>APIPulse</span></p>
+        <p class="muted">Supplier health for travel APIs. Runs in your browser.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="../tool/">Tool</a></li>
+        <li><a href="../guide/">Guide</a></li>
+        <li><a href="../teams/">Teams</a></li>
+        <li><a href="../privacy/">Privacy</a></li>
+        <li><a href="https://github.com/musttafamutlu-cloud/APIPulse" rel="noopener">Source on GitHub</a></li>
+      </ul>
+      <p class="muted small footer-note">Open source under the Apache-2.0 licence. Not affiliated with any supplier named on this site.</p>
+    </div>
+  </footer>
+</body>
+</html>

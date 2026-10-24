@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; base-uri 'none'; object-src 'none'; form-action 'none'">
+  <title>Look-to-book ratio explained — APIPulse</title>
+  <meta name="description" content="What the look-to-book (L2B) ratio is, how to calculate it, and why travel suppliers cap it.">
+  <link rel="canonical" href="https://musttafamutlu-cloud.github.io/APIPulse/guide/look-to-book/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="APIPulse">
+  <meta property="og:title" content="Look-to-book ratio explained — APIPulse">
+  <meta property="og:description" content="What the look-to-book (L2B) ratio is, how to calculate it, and why travel suppliers cap it.">
+  <meta property="og:url" content="https://musttafamutlu-cloud.github.io/APIPulse/guide/look-to-book/">
+  <meta property="og:image" content="https://musttafamutlu-cloud.github.io/APIPulse/assets/img/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../../assets/img/icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script type="module" src="../../assets/site.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap site-header__bar">
+      <a class="brand" href="../../"><img src="../../assets/img/icon.png" alt="" width="28" height="28"><span>APIPulse</span></a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="../../tool/">Tool</a>
+        <a href="../../guide/" aria-current="page">Guide</a>
+        <a href="../../teams/">Teams</a>
+        <a class="btn btn--small" href="https://chromewebstore.google.com/detail/lcmdjjckhlcoflpjfhgbgcpegommmjfi" rel="noopener">Add to Chrome</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <article class="wrap section--tight">
+      <p class="eyebrow"><a href="../">Guide</a></p>
+      <h1>Look-to-book ratio</h1>
+      <p class="byline">Last reviewed <time datetime="2026-10-24">24 October 2026</time></p>
+      <div class="prose">
+        <p class="answer">Look-to-book (L2B) is the number of searches you send to a supplier for every booking you confirm with them, over the same period. 300,000 searches and 25 bookings is 12,000:1. Suppliers watch it because searches cost them money and only bookings pay, so many agreements cap it or charge for traffic above an agreed level.</p>
+
+        <h2>How to calculate it</h2>
+        <p>Take one supplier and one period, count the requests that the agreement treats as a look, count the confirmed bookings, and divide the first by the second.</p>
+        <p><code>L2B = looks ÷ bookings</code></p>
+        <p>The arithmetic is trivial. The work is in agreeing what each side of the fraction contains.</p>
+        <h3>What counts as a look</h3>
+        <ul>
+          <li><strong>Availability and pricing searches</strong> are always looks. They are the bulk of the traffic.</li>
+          <li><strong>Re-checks before booking</strong> (price check, pre-book, rate verification) are counted by some suppliers and excluded by others. Ask, and write the answer down.</li>
+          <li><strong>Content and static data calls</strong> (hotel descriptions, images, room mapping) are usually outside the ratio, but they still add load and may have their own limits.</li>
+        </ul>
+        <p>Count looks where they leave your platform, after your own cache. A search answered from cache never reached the supplier and should not appear in their count, or in yours.</p>
+        <h3>What counts as a booking</h3>
+        <p>Use confirmed bookings, not attempts. Agree with the supplier whether bookings cancelled later still count. Most ratios are measured on confirmations, but the detail changes the number for high-cancellation segments.</p>
+
+        <h2>Why travel ratios run so high</h2>
+        <p>Thousands of searches per booking is normal in travel, and it is not a sign of bad engineering on its own. Several things multiply traffic before a single customer books:</p>
+        <ul>
+          <li>Metasearch and B2B partners search on behalf of users who never visit your site.</li>
+          <li>One user search fans out to every connected supplier, for every room and occupancy combination.</li>
+          <li>Flexible dates, map views and filters each trigger fresh availability requests.</li>
+          <li>Bots and scrapers search without any intent to book.</li>
+          <li>Short or missing cache lifetimes send identical requests repeatedly.</li>
+        </ul>
+        <p>The ratio becomes a problem when it grows faster than bookings, or when it crosses a level written into the agreement.</p>
+
+        <h2>Reading it properly</h2>
+        <p>A single portfolio-wide number hides the cause. Break it down at least by supplier, market and channel. A healthy average often contains one market where a supplier has little inventory but still receives every search, or one partner channel that searches constantly and rarely converts.</p>
+        <p>Watch the trend as well as the level. A ratio that doubles in a month usually has a specific cause: a new partner, a cache change, a release that removed request filtering, or a bot.</p>
+
+        <h2>Ways to bring it down</h2>
+        <ol>
+          <li><strong>Send searches only where the supplier can answer.</strong> Route by mapped hotels and served markets instead of fanning out to every supplier for every query.</li>
+          <li><strong>Cache with intent.</strong> Choose cache lifetimes per supplier and per step. Search results tolerate short-lived caching far better than booking steps, which must always be live.</li>
+          <li><strong>Remove duplicate requests.</strong> Collapse identical searches arriving within seconds of each other.</li>
+          <li><strong>Throttle by conversion.</strong> Give channels and partners a search budget that reflects what they book.</li>
+          <li><strong>Filter automated traffic</strong> before it reaches supplier connections.</li>
+        </ol>
+        <p>Each lever trades freshness or coverage for cost. Measure conversion before and after, not only the ratio.</p>
+
+        <div class="example">
+          <h3>Worked example</h3>
+          <p>Illustrative numbers. A hotel supplier receives 300,000 searches in a week and confirms 25 bookings, at 900 ms average response time and a 1% error rate.</p>
+          <p>L2B is 300,000 ÷ 25 = <span class="num">12,000:1</span>. Against the Hotels / Bedbanks preset in APIPulse that is <em>Good</em>: above the Excellent band, below Warning. If searches grew to 2,400,000 while bookings fell to 20, the ratio would be <span class="num">120,000:1</span> and the verdict would move to <em>Warning</em>, even though latency and errors did not change.</p>
+          <p><a href="../../tool/#v1=eyJiIjoiaG90ZWxzIiwibiI6WzMwMDAwMCwyNSw5MDAsMV19">Open the first case in the tool</a> · <a href="../../tool/#v1=eyJiIjoiaG90ZWxzIiwibiI6WzI0MDAwMDAsMjAsOTAwLDFdfQ">Open the second case</a></p>
+        </div>
+
+        <h2>How APIPulse scores it</h2>
+        <p>APIPulse divides searches by bookings and compares the result with three limits: Excellent below the first, Good below the second, Warning below the third, Critical at or above it. With zero bookings and some searches the ratio is infinite and the verdict is Critical. With no searches and no bookings there is nothing to rate, so L2B is left out.</p>
+        <p>The presets are illustrative. Replace them with the limits in your own agreement; see <a href="../thresholds/">Thresholds</a>.</p>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap site-footer__grid">
+      <div>
+        <p class="brand brand--quiet"><img src="../../assets/img/icon.png" alt="" width="20" height="20"><span>APIPulse</span></p>
+        <p class="muted">Supplier health for travel APIs. Runs in your browser.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="../../tool/">Tool</a></li>
+        <li><a href="../../guide/">Guide</a></li>
+        <li><a href="../../teams/">Teams</a></li>
+        <li><a href="../../privacy/">Privacy</a></li>
+        <li><a href="https://github.com/musttafamutlu-cloud/APIPulse" rel="noopener">Source on GitHub</a></li>
+      </ul>
+      <p class="muted small footer-note">Open source under the Apache-2.0 licence. Not affiliated with any supplier named on this site.</p>
+    </div>
+  </footer>
+</body>
+</html>

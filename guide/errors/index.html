@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; base-uri 'none'; object-src 'none'; form-action 'none'">
+  <title>Error rates for travel APIs — APIPulse</title>
+  <meta name="description" content="Technical versus business errors in supplier APIs, and what should count toward an error rate.">
+  <link rel="canonical" href="https://musttafamutlu-cloud.github.io/APIPulse/guide/errors/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="APIPulse">
+  <meta property="og:title" content="Error rates for travel APIs — APIPulse">
+  <meta property="og:description" content="Technical versus business errors in supplier APIs, and what should count toward an error rate.">
+  <meta property="og:url" content="https://musttafamutlu-cloud.github.io/APIPulse/guide/errors/">
+  <meta property="og:image" content="https://musttafamutlu-cloud.github.io/APIPulse/assets/img/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../../assets/img/icon.png">
+  <link rel="stylesheet" href="../../assets/site.css">
+  <script type="module" src="../../assets/site.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap site-header__bar">
+      <a class="brand" href="../../"><img src="../../assets/img/icon.png" alt="" width="28" height="28"><span>APIPulse</span></a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="../../tool/">Tool</a>
+        <a href="../../guide/" aria-current="page">Guide</a>
+        <a href="../../teams/">Teams</a>
+        <a class="btn btn--small" href="https://chromewebstore.google.com/detail/lcmdjjckhlcoflpjfhgbgcpegommmjfi" rel="noopener">Add to Chrome</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <article class="wrap section--tight">
+      <p class="eyebrow"><a href="../">Guide</a></p>
+      <h1>Error rates</h1>
+      <p class="byline">Last reviewed <time datetime="2026-10-24">24 October 2026</time></p>
+      <div class="prose">
+        <p class="answer">An error rate is failed calls divided by all calls of the same type, for one supplier and one period. The single most useful habit is to split it in two: technical errors, where the connection or the supplier's system failed, and business errors, where the system worked but the answer was no. They have different causes, different owners and different fixes.</p>
+
+        <h2>Technical errors</h2>
+        <p>The request did not get a valid answer.</p>
+        <ul>
+          <li>Timeouts on your side</li>
+          <li>Server errors (HTTP 5xx), connection resets, TLS failures</li>
+          <li>Responses that cannot be parsed or break the agreed schema</li>
+          <li>Authentication and rate-limit rejections</li>
+        </ul>
+        <p>These measure reliability. A rising technical error rate is a conversation with the supplier's technical team, or a look at your own connector if the failures follow a deployment.</p>
+
+        <h2>Business errors</h2>
+        <p>The system answered correctly, but the answer prevents the sale.</p>
+        <ul>
+          <li>Price changed between search and booking</li>
+          <li>Rate or room no longer available at pre-book or book</li>
+          <li>Booking rejected by a rule: stay restrictions, occupancy, nationality, payment</li>
+          <li>Invalid request: a field your platform sent wrongly</li>
+        </ul>
+        <p>These measure the quality of inventory, pricing and mapping, and sometimes the quality of your own requests. An empty search result is usually not an error at all; count it separately as an availability rate.</p>
+        <p>Invalid-request errors deserve their own line. They look like supplier problems in a dashboard, but the fix is in your code.</p>
+
+        <h2>Choose the denominator carefully</h2>
+        <p>Divide by the calls of the same step: search errors by searches, booking errors by booking attempts. Mixing steps hides the failures that matter most. A 0.5% failure rate on booking calls is far more expensive than 0.5% on searches, because each failed booking is a customer who already decided to buy.</p>
+        <p>Count each logical request once in the error rate, by its final outcome. Keep the failed attempts behind it in a separate retry count: if your connector retries a failed search and the retry succeeds, the request counts as a success, but the retry statistics should still show the failure. Otherwise retries quietly hide an unreliable supplier.</p>
+
+        <h2>Errors at the booking step</h2>
+        <p>A timeout or connection failure during booking does not mean the booking failed. The supplier may have confirmed it and the response was lost. Treat the outcome as unknown, check the booking status with the supplier, and reconcile before trying again. Retrying a booking blindly is how duplicate reservations happen.</p>
+        <p>For the same reason, report the booking step with three outcomes rather than two: confirmed, failed and unknown. The unknown count should be small, and every one of them should be resolved.</p>
+
+        <h2>What a useful report contains</h2>
+        <p>Per supplier and step, for one period:</p>
+        <ul>
+          <li>Technical error rate, with the main error codes</li>
+          <li>Business error rate, split into price change, availability and rule rejections</li>
+          <li>Invalid-request rate, owned by your own team</li>
+          <li>For booking: confirmed, failed and unknown counts</li>
+        </ul>
+        <p>Read the rates next to volume. A 10% error rate on 30 calls is noise; on 300,000 calls it is an incident.</p>
+
+        <div class="example">
+          <h3>Worked example</h3>
+          <p>Illustrative numbers. A supplier receives 50,000 searches, confirms 40 bookings and answers in 700 ms on average, but 6% of calls fail with technical errors.</p>
+          <p>L2B is <span class="num">1,250:1</span> and latency is Fast, yet against the Generic preset the error rate is <em>Elevated</em>, so the verdict is <em>Warning</em>. The supplier is quick and converts well when it works, which points the review at reliability rather than at traffic or pricing.</p>
+          <p><a href="../../tool/#v1=eyJiIjoiZ2VuZXJpYyIsIm4iOls1MDAwMCw0MCw3MDAsNl19">Open this example in the tool</a></p>
+        </div>
+
+        <h2>How APIPulse scores it</h2>
+        <p>APIPulse takes one error-rate figure, as a percentage, and rates it Low, Acceptable, Elevated or High against the selected thresholds. Enter the technical error rate there; business errors are better reviewed separately because their causes and owners differ. The error rate is optional: if you leave it empty, it is left out of the verdict and the report says so.</p>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap site-footer__grid">
+      <div>
+        <p class="brand brand--quiet"><img src="../../assets/img/icon.png" alt="" width="20" height="20"><span>APIPulse</span></p>
+        <p class="muted">Supplier health for travel APIs. Runs in your browser.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="../../tool/">Tool</a></li>
+        <li><a href="../../guide/">Guide</a></li>
+        <li><a href="../../teams/">Teams</a></li>
+        <li><a href="../../privacy/">Privacy</a></li>
+        <li><a href="https://github.com/musttafamutlu-cloud/APIPulse" rel="noopener">Source on GitHub</a></li>
+      </ul>
+      <p class="muted small footer-note">Open source under the Apache-2.0 licence. Not affiliated with any supplier named on this site.</p>
+    </div>
+  </footer>
+</body>
+</html>
