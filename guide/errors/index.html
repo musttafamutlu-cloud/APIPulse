@@ -66,7 +66,7 @@
 
         <h2>Choose the denominator carefully</h2>
         <p>Divide by the calls of the same step: search errors by searches, booking errors by booking attempts. Mixing steps hides the failures that matter most. A 0.5% failure rate on booking calls is far more expensive than 0.5% on searches, because each failed booking is a customer who already decided to buy.</p>
-        <p>Count each logical request once. If your connector retries a failed search and the retry succeeds, record both the failure and the retry; otherwise retries quietly hide an unreliable supplier.</p>
+        <p>Count each logical request once in the error rate, by its final outcome. Keep the failed attempts behind it in a separate retry count: if your connector retries a failed search and the retry succeeds, the request counts as a success, but the retry statistics should still show the failure. Otherwise retries quietly hide an unreliable supplier.</p>
 
         <h2>Errors at the booking step</h2>
         <p>A timeout or connection failure during booking does not mean the booking failed. The supplier may have confirmed it and the response was lost. Treat the outcome as unknown, check the booking status with the supplier, and reconcile before trying again. Retrying a booking blindly is how duplicate reservations happen.</p>

@@ -46,3 +46,17 @@ for (const page of ARTICLES) {
     assert.ok(words >= 600 && words <= 1500, `${page} has ${words} words`);
   });
 }
+
+test('latency example: stated average and percentiles match its own data', () => {
+  const html = read('guide/latency/index.html');
+  const ex = html.match(/data-fast-count="(\d+)" data-fast-ms="(\d+)" data-slow-count="(\d+)" data-slow-ms="(\d+)"/);
+  assert.ok(ex, 'example carries its data');
+  const [fc, fm, sc, sm] = ex.slice(1).map(Number);
+  const values = [...Array(fc).fill(fm), ...Array(sc).fill(sm)].sort((a, b) => a - b);
+  const pct = (p) => values[Math.ceil((p / 100) * values.length) - 1];
+  const stat = (name) => Number(html.match(new RegExp(`data-stat="${name}">([\\d,]+) ms`))[1].replace(/,/g, ''));
+  assert.equal(stat('avg'), values.reduce((a, b) => a + b, 0) / values.length);
+  assert.equal(stat('p95'), pct(95));
+  assert.equal(stat('p99'), pct(99));
+  assert.ok(pct(95) === sm, 'p95 lands in the slow tail, as the article argues');
+});

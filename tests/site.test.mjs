@@ -57,7 +57,10 @@ for (const page of PAGES) {
     const main = between(read(page), '<main', '</main>');
     assert.ok(main, 'has <main>');
     const text = textOf(main);
-    for (const word of ['cuddlynest', 'unlock', 'seamless', 'supercharge']) {
+    // Extra private terms (for example company names) can be checked locally
+    // without publishing them: APIPULSE_PRIVATE_TERMS="term one,term two" npm test
+    const privateTerms = (process.env.APIPULSE_PRIVATE_TERMS || '').split(',').map((t) => t.trim().toLowerCase()).filter(Boolean);
+    for (const word of ['unlock', 'seamless', 'supercharge', ...privateTerms]) {
       assert.ok(!text.toLowerCase().includes(word), `${page} contains "${word}"`);
     }
     assert.ok(!text.includes('APIpulse'), `${page} uses the old spelling APIpulse`);
@@ -103,3 +106,10 @@ for (const page of PAGES.filter((p) => p !== '404.html')) {
     assert.ok(fileExists('assets/img/social-card.png'));
   });
 }
+
+test('teams consent text matches how the form is actually sent', () => {
+  const html = read('teams/index.html');
+  const usesMailto = /<form[^>]*action="mailto:/.test(html);
+  const consent = between(html, '<label class="check">', '</label>');
+  if (usesMailto) assert.doesNotMatch(consent, /processed by/i, 'consent must not claim a form service while the form opens an e-mail draft');
+});

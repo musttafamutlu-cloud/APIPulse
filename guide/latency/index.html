@@ -44,13 +44,13 @@
         <p class="answer">Latency is how long a supplier takes to answer a request, measured from your side of the connection. The average is the easiest number to report and the least useful one: it hides the slow tail that users actually wait for. Track percentiles (p50, p95, p99) and the share of requests that hit your timeout.</p>
 
         <h2>Why the average misleads</h2>
-        <p>Suppose 100 searches go to a supplier. 95 come back in 400 ms and 5 take 8 seconds.</p>
-        <ul>
-          <li>The <strong>average</strong> is (95 × 400 + 5 × 8,000) ÷ 100 = <span class="num">780 ms</span>. It looks acceptable.</li>
-          <li>The <strong>p95</strong>, the time within which 95% of requests finish, is <span class="num">400 ms</span>.</li>
-          <li>The <strong>p99</strong> is <span class="num">8,000 ms</span>.</li>
+        <p>Suppose 100 searches go to a supplier. 90 come back in 400 ms and 10 take 8 seconds.</p>
+        <ul data-fast-count="90" data-fast-ms="400" data-slow-count="10" data-slow-ms="8000">
+          <li>The <strong>average</strong> is (90 × 400 + 10 × 8,000) ÷ 100 = <span class="num" data-stat="avg">1,160 ms</span>. It looks acceptable.</li>
+          <li>The <strong>median</strong> (p50) is <span class="num" data-stat="p50">400 ms</span>. Half of the searches are fast.</li>
+          <li>The <strong>p95</strong>, the time within which 95% of requests finish, is <span class="num" data-stat="p95">8,000 ms</span>, and so is the <strong>p99</strong> (<span class="num" data-stat="p99">8,000 ms</span>).</li>
         </ul>
-        <p>One search in twenty takes eight seconds. On a results page that waits for every supplier, those requests set the speed of the whole page. The average describes a request that never happened.</p>
+        <p>One search in ten takes eight seconds. On a results page that waits for every supplier, those requests set the speed of the whole page. The average describes a request that never happened.</p>
 
         <h2>Which percentiles to watch</h2>
         <ul>
