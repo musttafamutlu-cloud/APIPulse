@@ -155,3 +155,35 @@ a.card:hover { border-color: var(--line-strong); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Tool */
+.tool { margin: 24px 0; }
+.tool > .notice { margin-bottom: 16px; }
+.tool-section { padding: 24px 0; }
+.tool-section + .tool-section { border-top: 1px solid var(--line); }
+.tool-split { display: grid; gap: 16px; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+.tool--compact .tool-split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+@media (max-width: 860px) { .tool-split, .tool--compact .tool-split { grid-template-columns: minmax(0, 1fr); } }
+.tool-single { display: grid; gap: 16px; }
+.tool-result { display: grid; gap: 14px; }
+.tool-result__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tool-result__head .badge { font-size: 1rem; padding: 4px 14px; }
+.grid--kpi { grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px; }
+.kpi .badge { margin-top: 6px; font-size: 0.78rem; }
+.meter { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.meter__seg { height: 6px; border-radius: 3px; background: var(--surface-2); }
+.meter__seg--0.is-on { background: var(--s0); }
+.meter__seg--1.is-on { background: var(--s1); }
+.meter__seg--2.is-on { background: var(--s2); }
+.meter__seg--3.is-on { background: var(--s3); }
+.thresholds summary { cursor: pointer; font-weight: 560; }
+.thresholds[open] summary { margin-bottom: 8px; }
+.thresholds__row { border: 0; padding: 0; margin: 0 0 12px; }
+.thresholds__row legend { padding: 0; margin-bottom: 6px; }
+.problems { list-style: none; margin: 0; }
+.tool-actions { margin-top: 12px; }
+.profile-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.profile-list li { display: flex; justify-content: space-between; align-items: center; gap: 8px; border-bottom: 1px solid var(--line); padding: 4px 0; }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: var(--radius); font-size: 0.9rem; z-index: 20; max-width: calc(100% - 32px); }
+.toast[hidden] { display: none; }
+label.btn { cursor: pointer; }
